@@ -1,0 +1,32 @@
+version: "3.6"
+
+services:
+  db:
+    image: postgres:15.4
+    volumes:
+      - moxiedata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=moxie
+      - POSTGRES_USER=moxie_user
+      - POSTGRES_PASSWORD=moxie_pass
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command:
+      - /bin/bash
+      - -c
+      - |
+        python manage.py collectstatic --noinput
+        python manage.py migrate --noinput
+        python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  moxiedata:

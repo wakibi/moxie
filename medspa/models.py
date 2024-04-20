@@ -46,7 +46,7 @@ class Appointment(BaseEntity):
     SCHEDULED = 'SCH'
     COMPLETED = 'COM'
     CANCELED = 'CAN'
-    YEAR_IN_SCHOOL_CHOICES = [
+    STATUSES = [
         (SCHEDULED, 'Scheduled'),
         (COMPLETED, 'Completed'),
         (CANCELED, 'Canceled'),
@@ -54,7 +54,7 @@ class Appointment(BaseEntity):
     start_time = models.DateTimeField()
     total_duration = models.DurationField()
     total_price = models.DecimalField(decimal_places=2, max_digits=10)
-    status = models.CharField(max_length=5, choices=YEAR_IN_SCHOOL_CHOICES, default=SCHEDULED)
+    status = models.CharField(max_length=5, choices=STATUSES, default=SCHEDULED)
     medspa = models.ForeignKey(MedSpa, related_name='appointments', related_query_name='appointment', on_delete=models.CASCADE)
     services = models.ManyToManyField(Service, related_name='services', related_query_name='service')
     

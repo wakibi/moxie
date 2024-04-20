@@ -62,5 +62,11 @@ class Appointment(BaseEntity):
         return f'Appointment: {self.id}'
     
     def save(self, *args, **kwargs):
-        
+        total_price = 0
+        total_duration = 0
+        for service in self.services:
+            total_price += service.price
+            total_duration += service.duration
+        self.total_duration = total_duration
+        self.total_price = total_price
         super().save(*args, **kwargs)

@@ -52,21 +52,23 @@ class Appointment(BaseEntity):
         (CANCELED, 'Canceled'),
     ]
     start_time = models.DateTimeField()
-    total_duration = models.DurationField()
-    total_price = models.DecimalField(decimal_places=2, max_digits=10)
+    total_duration = models.PositiveIntegerField(blank=True)
+    total_price = models.DecimalField(blank=True, decimal_places=2, max_digits=10)
     status = models.CharField(max_length=5, choices=STATUSES, default=SCHEDULED)
     medspa = models.ForeignKey(MedSpa, related_name='appointments', related_query_name='appointment', on_delete=models.CASCADE)
-    services = models.ManyToManyField(Service, related_name='services', related_query_name='service')
+    services = models.ManyToManyField(Service, blank=True, related_name='services', related_query_name='service')
     
     def __str__(self):
         return f'Appointment: {self.id}'
     
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         total_price = 0
         total_duration = 0
-        for service in self.services:
+        for service in self.services.all():
             total_price += service.price
             total_duration += service.duration
+        print(total_duration)
         self.total_duration = total_duration
         self.total_price = total_price
-        super().save(*args, **kwargs)
+        self.save(update_fields=['total_price', 'total_duration'])

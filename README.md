@@ -5,7 +5,7 @@
 - Run `docker compose build`
 - Run `docker compose up` (make sure port 8000 is open as that's where the app runs)
 
-The `BASE_URL` for the API is `localhost:8000/api/medspa`
+The `BASE_URL` for the API is `localhost:8000/api/medspa`. I have deliberately disabled authorisation in the app to enable easy testing of the important aspects. No token / username requited.
 
 To list services, point the URL to (using Postman or your favorite browser) `BASE_URL/services/` using `GET` method
 To create a service, point the URL to `BASE_URL/services/` using `POST` method. The body should have the data for the new medspa
